@@ -1,21 +1,25 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class StickDrive extends Command {
-  private static Joystick driver;
+  private static final double deadband = 0.05;
+  private static double forward = 0.0;
+  private static double rotation = 0.0;
 
-  public StickDrive(Joystick pDriver) {
-    driver = pDriver;
-
+  public StickDrive() {
     addRequirements(Robot.driveTrain);
   }
 
   @Override
   public void execute() {
-    Robot.driveTrain.Drive(driver.getY(), driver.getX());
+    forward = MathUtil.applyDeadband(RobotContainer.driveController.getY(), deadband);
+    rotation = MathUtil.applyDeadband(RobotContainer.driveController.getX(), deadband);
+
+    Robot.driveTrain.Drive(forward * Math.abs(forward), rotation * Math.abs(rotation));
   }
 
   @Override

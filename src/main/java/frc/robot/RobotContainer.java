@@ -15,14 +15,14 @@ import frc.robot.commands.driveCommands.StickDrive;
 
 public class RobotContainer {
   private static SendableChooser<Command> autonomous = new SendableChooser<>();
-  private static Joystick driveController = new Joystick(0);
+  public static final Joystick driveController = new Joystick(0);
 
   public RobotContainer() {
     autonomous.setDefaultOption("No Auto", Commands.none());
     autonomous.addOption("Simple Cross Line", Autos.SimpleCrossLine());
     SmartDashboard.putData("Autonomous", autonomous);
 
-    Robot.driveTrain.setDefaultCommand(new StickDrive(driveController));
+    Robot.driveTrain.setDefaultCommand(new StickDrive());
 
     configureBindings();
   }
