@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
   private static SparkMax leftLeaderMotor = new SparkMax(0, MotorType.kBrushless);
-  private static SparkMax leftFollowerMotor = new SparkMax(0, MotorType.kBrushless);
-  private static SparkMax rightLeaderMotor = new SparkMax(0, MotorType.kBrushless);
-  private static SparkMax rightFollowerMotor = new SparkMax(0, MotorType.kBrushless);
+  private static SparkMax leftFollowerMotor = new SparkMax(1, MotorType.kBrushless);
+  private static SparkMax rightLeaderMotor = new SparkMax(2, MotorType.kBrushless);
+  private static SparkMax rightFollowerMotor = new SparkMax(3, MotorType.kBrushless);
 
   public DriveTrain() {
     SparkMaxConfig leftLeaderConfig = new SparkMaxConfig();
