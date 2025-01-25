@@ -10,6 +10,9 @@ public class Autos extends Command {
     throw new UnsupportedOperationException("This is a Utility Class!");
   }
 
+  /**
+   * Crosses the Line for easy Autonomous points (12.5s execution)
+   */
   public static Command SimpleCrossLine() {
     return new SequentialCommandGroup(
       new WaitCommand(10.0),

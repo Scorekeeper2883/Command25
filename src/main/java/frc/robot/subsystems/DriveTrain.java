@@ -19,6 +19,7 @@ public class DriveTrain extends SubsystemBase {
     SparkMaxConfig rightLeaderConfig = new SparkMaxConfig();
     SparkMaxConfig rightFollowerConfig = new SparkMaxConfig();
 
+    /* Change/add to these configurations as necessary (e.g. changing inverted states) */
     leftLeaderConfig
     .idleMode(IdleMode.kBrake)
     .inverted(false);

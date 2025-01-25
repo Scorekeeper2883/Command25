@@ -16,8 +16,8 @@ public class StickDrive extends Command {
 
   @Override
   public void execute() {
-    forward = MathUtil.applyDeadband(RobotContainer.driveController.getY(), deadband);
-    rotation = MathUtil.applyDeadband(RobotContainer.driveController.getX(), deadband);
+    forward = MathUtil.applyDeadband(RobotContainer.driveController.getY(), deadband);  // 0 +/- deadband is still 0
+    rotation = MathUtil.applyDeadband(RobotContainer.driveController.getX(), deadband);  // 0 +/- deadband is still 0
 
     Robot.driveTrain.Drive(forward * Math.abs(forward), rotation * Math.abs(rotation));
   }

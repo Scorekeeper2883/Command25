@@ -14,8 +14,8 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.driveCommands.StickDrive;
 
 public class RobotContainer {
-  private static SendableChooser<Command> autonomous = new SendableChooser<>();
   public static final Joystick driveController = new Joystick(0);
+  private static SendableChooser<Command> autonomous = new SendableChooser<>();
 
   public RobotContainer() {
     autonomous.setDefaultOption("No Auto", Commands.none());
@@ -28,7 +28,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    final JoystickButton exampleButton = new JoystickButton(driveController, 99);
+    final JoystickButton exampleButton = new JoystickButton(driveController, 99); // 99 is a Reasonably Large Number (RLN), meant to not be used
 
     exampleButton.whileTrue(Commands.none());
   }
