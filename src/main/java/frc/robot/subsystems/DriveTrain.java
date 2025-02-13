@@ -5,11 +5,13 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPLTVController;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +22,13 @@ public class DriveTrain extends SubsystemBase {
   private static SparkMax rightLeaderMotor = new SparkMax(2, MotorType.kBrushless);
   private static SparkMax rightFollowerMotor = new SparkMax(3, MotorType.kBrushless);
 
+  RelativeEncoder leftEncoder;
+  RelativeEncoder rightEncoder;
+
   public DriveTrain() {
+    leftEncoder = leftLeaderMotor.getEncoder();
+    rightEncoder = rightLeaderMotor.getEncoder();
+
     SparkMaxConfig leftLeaderConfig = new SparkMaxConfig();
     SparkMaxConfig leftFollowerConfig = new SparkMaxConfig();
     SparkMaxConfig rightLeaderConfig = new SparkMaxConfig();
@@ -80,20 +88,31 @@ public class DriveTrain extends SubsystemBase {
     );
   }
 
-  public void Drive(double forward, double rotation) {
+  public void Drive(double forward, double rotation) {  // VelocityPercentage!
     leftLeaderMotor.set(forward + rotation);
     rightLeaderMotor.set(forward - rotation);
   }
 
-  private void driveRobotRelative(ChassisSpeeds speeds) {  }
+  private void driveRobotRelative(ChassisSpeeds speeds) { // MetersPerSecond!
+    Drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+  }
 
   private Pose2d getPose() {
-    return null;
+    return new Pose2d(
+      leftEncoder.getPosition(),
+      rightEncoder.getPosition(),
+      new Rotation2d(leftEncoder.getPosition(), rightEncoder.getPosition()));
   }
 
-  private ChassisSpeeds getRobotRelativeSpeeds() {
-    return null;
+  private ChassisSpeeds getRobotRelativeSpeeds() {  // MetersPerSecod!
+    return new ChassisSpeeds(
+      (leftLeaderMotor.get() + rightLeaderMotor.get()) / 2,
+      0,
+      leftLeaderMotor.get() - rightLeaderMotor.get());
   }
 
-  private void resetPose(Pose2d temp) {  }
+  private void resetPose(Pose2d temp) {
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
+  }
 }

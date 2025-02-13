@@ -28,7 +28,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    final JoystickButton exampleButton = new JoystickButton(driveController, 99); // 99 is a Reasonably Large Number (RLN), meant to not be used
+    final JoystickButton exampleButton = new JoystickButton(driveController, 99); // 99 is a Reasonably Large Number (RLN) ex & not to be used
 
     exampleButton.whileTrue(Commands.none());
   }
