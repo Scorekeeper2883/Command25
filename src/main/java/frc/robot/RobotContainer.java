@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +14,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.driveCommands.StickDrive;
 
 public class RobotContainer {
-  public static final Joystick driveController = new Joystick(0);
+  public static final XboxController driveController = new XboxController(0);
   private static SendableChooser<Command> autonomous = new SendableChooser<>();
 
   public RobotContainer() {

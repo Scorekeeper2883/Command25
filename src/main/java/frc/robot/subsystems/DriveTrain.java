@@ -1,35 +1,46 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
   private static SparkMax leftLeaderMotor, leftFollowerMotor, rightLeaderMotor, rightFollowerMotor;
+  private static RelativeEncoder leftEncoder, rightEncoder;
   private static SparkMaxConfig leftLeaderConfig, leftFollowerConfig, rightLeaderConfig, rightFollowerConfig;
+  private static PIDController drivePID;
+
+  private static final double MAX_RPM = 5676;
 
   public DriveTrain() {
     leftLeaderMotor = new SparkMax(0, MotorType.kBrushless);
     leftFollowerMotor = new SparkMax(1, MotorType.kBrushless);
     rightLeaderMotor = new SparkMax(2, MotorType.kBrushless);
     rightFollowerMotor = new SparkMax(3, MotorType.kBrushless);
+
+    leftEncoder = leftLeaderMotor.getEncoder();
+    rightEncoder = rightLeaderMotor.getEncoder();
   
     leftLeaderConfig = new SparkMaxConfig();
     leftFollowerConfig = new SparkMaxConfig();
     rightLeaderConfig = new SparkMaxConfig();
     rightFollowerConfig = new SparkMaxConfig();
 
+    drivePID = new PIDController(0, 0, 0);
+
     setFollow();
     setInverted();
     BrakeMode();
   }
 
-  public void Drive(double forward, double rotation) {
-    leftLeaderMotor.set(forward + rotation);
-    rightLeaderMotor.set(forward - rotation);
+  public void Drive(double left, double right) {
+    leftLeaderMotor.set(drivePID.calculate(leftEncoder.getVelocity(), left * MAX_RPM));
+    rightLeaderMotor.set(drivePID.calculate(rightEncoder.getVelocity(), right * MAX_RPM));
   }
 
   public void CoastMode() {

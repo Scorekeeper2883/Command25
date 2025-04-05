@@ -7,8 +7,7 @@ import frc.robot.RobotContainer;
 
 public class StickDrive extends Command {
   private static final double deadband = 0.05;
-  private static double forward = 0.0;
-  private static double rotation = 0.0;
+  private static double left, right;
 
   public StickDrive() {
     addRequirements(Robot.driveTrain);
@@ -16,10 +15,19 @@ public class StickDrive extends Command {
 
   @Override
   public void execute() {
-    forward = MathUtil.applyDeadband(RobotContainer.driveController.getY(), deadband);  // 0 +/- deadband is still 0
-    rotation = MathUtil.applyDeadband(RobotContainer.driveController.getX(), deadband);  // 0 +/- deadband is still 0
+    left = MathUtil.applyDeadband(RobotContainer.driveController.getLeftY()
+                                  + RobotContainer.driveController.getRightX(), deadband);
+    right = MathUtil.applyDeadband(RobotContainer.driveController.getLeftY()
+                                  - RobotContainer.driveController.getRightX(), deadband);
 
-    Robot.driveTrain.Drive(forward * Math.abs(forward), rotation * Math.abs(rotation));
+    if(Math.abs(left) > 1) {
+      left = left / Math.abs(left);
+    }
+    if(Math.abs(right) > 1) {
+      right = right / Math.abs(left);
+    }
+
+    Robot.driveTrain.Drive(left * Math.abs(left), right * Math.abs(right));
   }
 
   @Override

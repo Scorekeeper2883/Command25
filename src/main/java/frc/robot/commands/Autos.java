@@ -16,6 +16,6 @@ public class Autos extends Command {
   public static Command SimpleCrossLine() {
     return new SequentialCommandGroup(
       new WaitCommand(10.0),
-      new AutoDrive(0.25, 0.0).withTimeout(2.5));
+      new AutoDrive(0.25, 0.25).withTimeout(2.5));
   }
 }
