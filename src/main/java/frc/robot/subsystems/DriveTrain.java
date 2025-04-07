@@ -16,6 +16,8 @@ public class DriveTrain extends SubsystemBase {
   private static PIDController drivePID;
 
   private static final double MAX_RPM = 5676;
+  private static final double GEAR_RATIO = 1 / 6.75;
+  private static final double WHEEL_CIRCUMFERENCE = 6 * 3.14;
 
   public DriveTrain() {
     leftLeaderMotor = new SparkMax(0, MotorType.kBrushless);
@@ -38,9 +40,13 @@ public class DriveTrain extends SubsystemBase {
     BrakeMode();
   }
 
-  public void Drive(double left, double right) {
-    leftLeaderMotor.set(drivePID.calculate(leftEncoder.getVelocity(), left * MAX_RPM));
-    rightLeaderMotor.set(drivePID.calculate(rightEncoder.getVelocity(), right * MAX_RPM));
+  public void BrakeMode() {
+    leftLeaderConfig.idleMode(IdleMode.kBrake);
+    leftFollowerConfig.idleMode(IdleMode.kBrake);
+    rightLeaderConfig.idleMode(IdleMode.kBrake);
+    rightFollowerConfig.idleMode(IdleMode.kBrake);
+
+    setConfig();
   }
 
   public void CoastMode() {
@@ -52,13 +58,25 @@ public class DriveTrain extends SubsystemBase {
     setConfig();
   }
 
-  public void BrakeMode() {
-    leftLeaderConfig.idleMode(IdleMode.kBrake);
-    leftFollowerConfig.idleMode(IdleMode.kBrake);
-    rightLeaderConfig.idleMode(IdleMode.kBrake);
-    rightFollowerConfig.idleMode(IdleMode.kBrake);
+  public void Drive(double left, double right) {
+    leftLeaderMotor.set(drivePID.calculate(leftEncoder.getVelocity() / MAX_RPM, left));
+    rightLeaderMotor.set(drivePID.calculate(rightEncoder.getVelocity() / MAX_RPM, right));
+  }
 
-    setConfig();
+  public double getLeftEncoder() {
+    return leftEncoder.getPosition() * GEAR_RATIO * WHEEL_CIRCUMFERENCE;
+  }
+
+  public double getRightEncoder() {
+    return rightEncoder.getPosition() * GEAR_RATIO * WHEEL_CIRCUMFERENCE;
+  }
+
+  public void resetLeftEncoder() {
+    leftEncoder.setPosition(0);
+  }
+
+  public void resetRightEncoder() {
+    rightEncoder.setPosition(0);
   }
 
   private void setFollow() {
